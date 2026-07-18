@@ -1,0 +1,16 @@
+name: 自动同步原作者更新
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # 每天北京时间上午 10 点自动同步一次
+  workflow_dispatch: # 支持你在网页上点击手动触发同步
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 同步分支
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # 注意：下面最后如果是 main，就写 main；如果是 master，就写 master（取决于原仓库主分支叫什么）
+        run: gh repo sync ${{ github.repository }} --branch main
